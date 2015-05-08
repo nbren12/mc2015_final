@@ -53,3 +53,9 @@ Then, the estimate as the sample $\theta_{k*}$ which minimizes $f$.
 Note that $U_{j}$ is only in $e_j$ and $e_{j-1}$, this can be used to
 simplify the optimization problem, and suggests some sort of
 resampling technique.
+
+* Code Architecture
+
+- The integrator for the dynamical system is defined in [[file:src/integrate.cpp][integrate.cpp]].
+- The basic proposal_distribution and metropolis acceptance function
+  are defined in [[file:src/mcmc.cpp]].
