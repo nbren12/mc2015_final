@@ -1,0 +1,50 @@
+Not sure what the due date is for this project.
+
+
+* Introduction
+
+The point of this final project is to learn parameters in Lorenz63
+using monte carlo methods. The approach taken is to formulate a
+Hamiltonian using the dynamic residuals, and then sample from the
+corresponding Gibbs distribution.
+
+Another project idea is to estimate the state of the system (and maybe
+the parameters too) given noisy observations (e.g. data assimilation).
+
+* Lorenz 63 
+
+This system is one of the earliest examples of what would later become
+known as /chaotic/ dynamical systems. It is obtained by projection of
+the Rayleigh-Benard equations for convection of a thin layer onto
+three orthogonal modes. The system is given by
+\begin{align}
+\dot{X} &= \sigma(Y-X)\\
+\dot{Y} &= -XZ + rX - Y\\
+\dot{Z} &= XY - bZ.
+\end{align}
+The parameters used by Lorenz are $\sigma = 10$, $b=8/3$ and $r=28$.
+
+* Dynamic Residuals
+
+Let $U$ be given by the dynamics 
+\[ \dot{U} =  F(U; \theta) + \sigma \dot{W}\]
+where $\theta$ is some set of parameters.
+
+Let $T > 0$, $N$, and define $\tau = T / (N+1)$. Then, a temporal grid
+$t_j=j \tau$ can be defined for $j=0...N$. Let $\Psi_t^{\theta}$ be the
+pushforward operator for deterministic part of the dynamics. Given a
+set of point estimates $U_j$ and parameters, define the dynamic
+residual for a time $t_j$ to be
+\[ e_j := e(U_{j-1}, U_j, \theta) :=  \Psi_{\tau}^{\theta} U_{j-1} - U_j.\]
+
+Then, a sensible way to choose the parameters is so that they minimize
+\[ \sum_{j=1}^{N}|e_j|^2.\]
+
+Because $\theta$ is a potentially high dimensional object, monte carlo
+techniques can be used to perform this optimization.
+
+* Sampling strategy
+
+Generate samples $\theta_k$ from
+\[ f(\theta) \propto  e^{-\beta \sum_{j=1}^{N}|e_j|^2}.\]
+Then, the estimate as the sample $\theta_{k*}$ which minimizes $f$.
