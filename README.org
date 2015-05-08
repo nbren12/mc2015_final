@@ -48,3 +48,8 @@ techniques can be used to perform this optimization.
 Generate samples $\theta_k$ from
 \[ f(\theta) \propto  e^{-\beta \sum_{j=1}^{N}|e_j|^2}.\]
 Then, the estimate as the sample $\theta_{k*}$ which minimizes $f$.
+
+* Data assimilation
+Note that $U_{j}$ is only in $e_j$ and $e_{j-1}$, this can be used to
+simplify the optimization problem, and suggests some sort of
+resampling technique.
