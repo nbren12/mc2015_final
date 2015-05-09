@@ -120,7 +120,7 @@ template<typename stream, typename T> void save(stream& fout, T & y, double t){
  * of the distribution
  */
 vec evolve(double tStart, double tEnd, vec y, vec& theta, double dtMax){
-  WorkStruct work(3, theta(0), theta(1), theta(3), theta(4));
+  WorkStruct work(3, theta(0), theta(1), theta(2), theta(3));
 
   work.evolve(tStart, tEnd, y, dtMax);
   return y;
