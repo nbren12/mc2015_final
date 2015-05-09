@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
   vec theta;					// Parameters
   theta << 10.0 << 8.0/3.0 << 28.0 << 0.0;	// True values
   theta(0) = 10.5;				// Make sigma different
+
+  
   cout << equil(theta, output, tout, beta);      // Print equil output
 
   return 0;

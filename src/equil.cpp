@@ -1,3 +1,4 @@
+#include <armadillo>
 #include <functional>
 #include <cmath>
 #include "integrate.h"

@@ -1,7 +1,8 @@
 #include <armadillo>
-
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
+
+#include "mcmc.h"
 
 #define gaussian_length_scale 1.0
 
