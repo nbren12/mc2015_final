@@ -61,10 +61,11 @@ struct WorkStruct {
 
 void WorkStruct::eulerStep(double t, double dt, vec& y){
   sdeA(t, y.memptr(), a.memptr());
-
+  
   // Deterministic predictor corrector
   b = y + dt * a;
   sdeA(t, b.memptr(), c.memptr());
+
   y = y  + dt/2.0 * (a + c);
 
 
@@ -73,7 +74,7 @@ void WorkStruct::eulerStep(double t, double dt, vec& y){
   int i;
   double ys;
   for (i = 0; i < n; i++) {
-    y[i] += gsl_ran_gaussian(rng, sqrt(dt)*b(i));
+    y[i] += gsl_ran_gaussian(rng, sqrt(dt)*a(i));
   }
 }
 
@@ -90,7 +91,7 @@ void WorkStruct::evolve(double tStart, double tEnd, vec& y, double dtMax){
     if (dt > 0) {
       eulerStep(t, dt, y);
       t += dt;
-      cout << t << endl;
+      // cout << t << endl;
     }
     if (killLoop) break;
 
@@ -156,11 +157,12 @@ int test_output()
   vec y;
   y << 1 << 1 << 1;
   double tStart = 0;
-  double tEnd   = 1.0;
-  double dtMax = .01;
+  double tEnd   = 40.0;
+  double dtout = .01;
+  double dtMax = .001;
 
   // Output times
-  vec tout = linspace<vec>(tStart, tEnd, 100);
+  vec tout = linspace<vec>(tStart, tEnd, (int) tEnd / dtout);
 
   // Output file
   ofstream fout;
