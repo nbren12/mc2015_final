@@ -32,7 +32,7 @@ struct WorkStruct {
   }
 
   // time stepping routines
-  void eulerStep(double t, double dt, vec y);
+  void eulerStep(double t, double dt, vec& y);
   void evolve(double tStart, double tEnd, vec& y,
 	      double dtMax);
 
@@ -59,7 +59,7 @@ struct WorkStruct {
   
 };
 
-void WorkStruct::eulerStep(double t, double dt, vec y){
+void WorkStruct::eulerStep(double t, double dt, vec& y){
   sdeA(t, y.memptr(), a.memptr());
 
   // Deterministic predictor corrector
@@ -99,6 +99,15 @@ void WorkStruct::evolve(double tStart, double tEnd, vec& y, double dtMax){
       killLoop = 1;
     }
   }
+}
+
+template<typename stream, typename T> void save(stream& fout, T & y){
+  int i;
+  for (i = 0; i < y.n_elem; i++) {
+    fout << y(i);
+    if ( i < y.n_elem - 1) fout << " ";
+  }
+  fout << endl;
 }
 
 
@@ -150,16 +159,28 @@ int test_output()
   double tEnd   = 1.0;
   double dtMax = .01;
 
-  // Evolve function from start to finish
-  work.evolve(tStart, tEnd, y, dtMax);
+  // Output times
+  vec tout = linspace<vec>(tStart, tEnd, 100);
 
+  // Output file
+  ofstream fout;
+  fout.open("output.txt");
+  save(fout, y);
+
+  int i;
+  for (i = 1; i < tout.n_elem; i++) {
+    work.evolve(tout(i-1), tout(i), y, dtMax);
+    save(fout, y);
+  }
+  fout.close();
   return 0;
 }
 
 
 int main(int argc, char *argv[])
 {
-  test_eulerStep();
-  test_evolve();
+  // test_eulerStep();
+  // test_evolve();
+  test_output();
   return 0;
 }

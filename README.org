@@ -59,3 +59,6 @@ resampling technique.
 - The integrator for the dynamical system is defined in [[file:src/integrate.cpp][integrate.cpp]].
 - The basic proposal_distribution and metropolis acceptance function
   are defined in [[file:src/mcmc.cpp]].
+  
+** TODO Write a test showing output of lorenz63 with and without noise
+   
