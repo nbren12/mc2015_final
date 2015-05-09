@@ -1,5 +1,11 @@
 #include <armadillo>
+
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
+
 #define gaussian_length_scale 1.0
+
+gsl_rng * r;
 
 using namespace arma;
 
@@ -39,11 +45,11 @@ template<typename func> int A(func& f, vec& X, vec& Y ){
 
 // MCMC runner
 template<typename func, typename observer>
-void run_mcmc(func& f, dvec& X, long int N, observer obs){
+void run_mcmc(func& f, vec& X, long int N, observer obs){
   int i;
-
+  r = gsl_rng_alloc(gsl_rng_default);
   // Copy X into new dvec Y
-  dvec Y = X;
+  vec Y = X;
 
   for (i = 0; i < N; i++) {
     proposal_rand(X, Y);
@@ -53,4 +59,6 @@ void run_mcmc(func& f, dvec& X, long int N, observer obs){
     // Observe X
     obs(X);
   }
+
+  gsl_rng_free(r);
 }

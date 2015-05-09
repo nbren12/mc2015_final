@@ -21,11 +21,10 @@ SET ( SOURCES integrate.cpp lorenz63.c )
 
 # configure_file( deep_moist ${CMAKE_CURRENT_BINARY_DIR}/deep_moist COPYONLY)
 add_library( lorenz63 SHARED ${SOURCES})
-add_executable ( test_integrate  ${SOURCES} )
 target_link_libraries (lorenz63 m gsl gslcblas armadillo) 
-target_link_libraries (test_integrate m gsl gslcblas armadillo) 
 
 
 add_executable(param_search param_search.cpp equil.cpp integrate.cpp mcmc.cpp)
+target_link_libraries (param_search m gsl gslcblas armadillo) 
 
 

@@ -7,4 +7,5 @@ arma::vec evolve(double tStart, double tEnd, arma::vec y, arma::vec& theta,
 		 double dtMax);
 
 
-std::function<double(vec&)> mk_equil_functor(mat& U, vec& t);
+
+mat run_model(vec& tout, vec & y, double dtMax = .001);

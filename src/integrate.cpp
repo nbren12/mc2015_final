@@ -126,6 +126,26 @@ vec evolve(double tStart, double tEnd, vec y, vec& theta, double dtMax){
   return y;
 }
 
+mat run_model(vec& tout, vec & y, double dtMax)
+{
+   // initialize working arrays
+  const int n =3;
+  WorkStruct work(n);
+
+  // Output data
+  mat output(n, tout.n_elem);
+  output.col(0) = y;
+
+  int i;
+  for (i = 1; i < tout.n_elem; i++) {
+    work.evolve(tout(i-1), tout(i), y, dtMax);
+    output.col(i) = y;
+  }
+
+  return output;
+}
+
+
 int test_eulerStep()
 {
    // initialize working arrays
@@ -143,8 +163,6 @@ int test_eulerStep()
 
   return 0;
 }
-
-
 
 int test_evolve()
 {
@@ -192,8 +210,20 @@ int test_output()
   return 0;
 }
 
+int test_run_model()
+{
+  double tau  = 1.0;   // Sampling interval
+  double tEnd = 100.0; // Sampling length
 
-int main(int argc, char *argv[])
+  vec tout = linspace(0.0, tEnd, (int) tEnd /tau);	// Output times
+  vec y("-7.4185 -12.4638 15.6519");			// initial condition
+  auto output = run_model(tout, y);			// get output data
+  output.print();
+
+  return 0;
+}
+
+int main_(int argc, char *argv[])
 {
   // test_eulerStep();
   // test_evolve();

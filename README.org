@@ -58,6 +58,7 @@ resampling technique.
 
 #+BEGIN_SRC emacs-lisp
   (require 'ob-dot)
+  (setq org-confirm-babel-evaluate nil)
 #+END_SRC
 
 - The integrator for the dynamical system is defined in [[file:src/integrate.cpp][integrate.cpp]].
@@ -76,6 +77,9 @@ resampling technique.
    
   }
 #+END_SRC
+
+#+RESULTS:
+[[file:dependency.svg]]
 
 
    
