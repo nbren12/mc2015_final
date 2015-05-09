@@ -36,3 +36,21 @@ template<typename func> int A(func& f, vec& X, vec& Y ){
     return gsl_ran_bernoulli(r, accept);
   }
 }
+
+// MCMC runner
+template<typename func, typename observer>
+void run_mcmc(func& f, dvec& X, long int N, observer obs){
+  int i;
+
+  // Copy X into new dvec Y
+  dvec Y = X;
+
+  for (i = 0; i < N; i++) {
+    proposal_rand(X, Y);
+    if (A(f, X, Y))
+      std::copy(Y.begin(), Y.end(), X.begin());
+
+    // Observe X
+    obs(X);
+  }
+}
