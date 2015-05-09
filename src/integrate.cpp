@@ -23,7 +23,7 @@ struct WorkStruct {
   WorkStruct(int n, double sigma=10.0, double beta=8.0/3.0, double r=28.0,
 	     double epsilon=0.0) :
     n(n), a(vec(n)), b(vec(n)), c(vec(n)),
-    sigma(10.0), beta(beta), rho(r), epsilon(epsilon) {
+    sigma(sigma), beta(beta), rho(r), epsilon(epsilon) {
     rng = gsl_rng_alloc(gsl_rng_default);
   }
 
