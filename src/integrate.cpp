@@ -1,9 +1,10 @@
 #include <iostream>
 #include <stdlib.h>
-#include <armadillo>
 #include <math.h>
 #include "gsl/gsl_rng.h"
 #include "gsl/gsl_randist.h"
+
+#include "integrate.h"
 
 using namespace std;
 using namespace arma;
@@ -118,9 +119,11 @@ template<typename stream, typename T> void save(stream& fout, T & y, double t){
  * theta = (sigma, beta, rho, epsilon) is a vector of the parameters
  * of the distribution
  */
-void evolve(double tStart, double tEnd, vec& y, vec& theta, double dtMax){
-  WorkStruct(3, theta(0), theta(1), theta(3), theta(4));
-  
+vec evolve(double tStart, double tEnd, vec y, vec& theta, double dtMax){
+  WorkStruct work(3, theta(0), theta(1), theta(3), theta(4));
+
+  work.evolve(tStart, tEnd, y, dtMax);
+  return y;
 }
 
 int test_eulerStep()
