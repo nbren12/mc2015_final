@@ -84,5 +84,10 @@ resampling technique.
 
    
 
-** DONE Write a test showing output of lorenz63 with and without noise
-   
+** DONE Write a test showing output of lorenz63 with and 
+
+* Results
+
+** TODO Find ideal Gibbs beta
+  
+** TODO Increasing rayleigh number 
