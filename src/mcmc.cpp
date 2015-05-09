@@ -1,8 +1,10 @@
 #include <armadillo>
 #define gaussian_length_scale 1.0
 
+using namespace arma;
+
 void proposal_rand(vec& X, vec& Y){
-  int d = X.n_rows;
+  int d = X.n_elem;
   int i;
   for (i = 0; i < d; i++) {
     Y(i) = X(i) + gsl_ran_gaussian(r, gaussian_length_scale);
@@ -11,7 +13,7 @@ void proposal_rand(vec& X, vec& Y){
 
 // Proposal step generate gaussian
 double proposal_pdf(vec& X, vec& Y){
-  int d = X.n_rows;
+  int d = X.n_elem;
   int i;
 
   double p = 1.0;
