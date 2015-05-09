@@ -56,9 +56,29 @@ resampling technique.
 
 * Code Architecture
 
+#+BEGIN_SRC emacs-lisp
+  (require 'ob-dot)
+#+END_SRC
+
 - The integrator for the dynamical system is defined in [[file:src/integrate.cpp][integrate.cpp]].
-- The basic proposal_distribution and metropolis acceptance function
+- [[file:src/equil.cpp]] contains the equilibrium distribution
+- The basic proposal distribution and metropolis acceptance function
   are defined in [[file:src/mcmc.cpp]].
+- [[file:src/param_search.cpp]] will contain the main function
   
-** TODO Write a test showing output of lorenz63 with and without noise
+** Dependency Graph
+
+#+BEGIN_SRC dot :file dependency.svg
+  digraph thing {
+   "param_search.cpp" -> "equil.cpp";
+   "param_search.cpp" -> "mcmc.cpp";
+   "equil.cpp" -> "integrate.cpp";
+   
+  }
+#+END_SRC
+
+
+   
+
+** DONE Write a test showing output of lorenz63 with and without noise
    
