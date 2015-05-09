@@ -102,8 +102,9 @@ void WorkStruct::evolve(double tStart, double tEnd, vec& y, double dtMax){
   }
 }
 
-template<typename stream, typename T> void save(stream& fout, T & y){
+template<typename stream, typename T> void save(stream& fout, T & y, double t){
   int i;
+  fout << t << " ";
   for (i = 0; i < y.n_elem; i++) {
     fout << y(i);
     if ( i < y.n_elem - 1) fout << " ";
@@ -111,6 +112,16 @@ template<typename stream, typename T> void save(stream& fout, T & y){
   fout << endl;
 }
 
+/* @doc: A function for evolving the lorenz system given a list of
+ * parameters.
+ * 
+ * theta = (sigma, beta, rho, epsilon) is a vector of the parameters
+ * of the distribution
+ */
+void evolve(double tStart, double tEnd, vec& y, vec& theta, double dtMax){
+  WorkStruct(3, theta(0), theta(1), theta(3), theta(4));
+  
+}
 
 int test_eulerStep()
 {
@@ -167,12 +178,12 @@ int test_output()
   // Output file
   ofstream fout;
   fout.open("output.txt");
-  save(fout, y);
+  save(fout, y, tout(0));
 
   int i;
   for (i = 1; i < tout.n_elem; i++) {
     work.evolve(tout(i-1), tout(i), y, dtMax);
-    save(fout, y);
+    save(fout, y, tout(i));
   }
   fout.close();
   return 0;
