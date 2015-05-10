@@ -70,21 +70,21 @@ int main(int argc, char *argv[])
 
   if  (strcmp(argv[1], "sample") == 0){
     double noise = atof(argv[++offset]);
-    double beta = atof(argv[++offset]);
+    double beta = atof(argv[++offset]);  // Gibbs distribution parameter
     long int N = atol(argv[++offset]);
     estimate_parameters(N,  noise,  beta,  tau, nt);
 
   } else if  (strcmp(argv[1], "run") == 0){
 
     double sigma = atof(argv[++offset]);
-    double beta = atof(argv[++offset]);
+    double beta = atof(argv[++offset]);  // Parameter in Lorenz system
     double r = atof(argv[++offset]);
     double epsilon = atof(argv[++offset]);
 
     vec tout = linspace(0, nt * tau, nt+1);             // Output times
     vec y("-7.4185 -12.4638 15.6519");			// initial condition
     auto output = run_model(tout , y, .001, sigma, beta, r, epsilon);
-    output.print();
+    output.save("output.txt", raw_ascii);
   }
   return 0;
 }
