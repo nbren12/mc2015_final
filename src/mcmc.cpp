@@ -9,7 +9,7 @@
 
 gsl_rng * r;
 
-double stdev[]= {1.0, .1, 1.0};
+double stdev[]= {.5, .1, 1.0};
 
 using namespace arma;
 using namespace std;

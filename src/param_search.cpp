@@ -41,7 +41,7 @@ void estimate_parameters(long int N, double noise, double beta, double tau, int 
 
   vec theta;					// Vector of parameters
   theta << 10.0 << 8.0/3.0 << 28.0 << noise;	// True values of parameters
-  theta << 13.0 << 5.0/3.0 << 20.0 << noise;	// init cond of parameters
+  theta << 7.0 << 5.0/3.0 << 20.0 << noise;	// init cond of parameters
 
   auto f = bind(equil, _1, output, tout, beta); // equildist for theta f(theta) 
 
