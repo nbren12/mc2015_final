@@ -29,7 +29,7 @@ struct WorkStruct {
 
   // Destructor
   ~WorkStruct(){
-    free(rng);
+    gsl_rng_free(rng);
   }
 
   // time stepping routines

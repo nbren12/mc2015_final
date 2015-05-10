@@ -13,6 +13,12 @@ else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+
+# Armadillo
+# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /home/noah/usr/share/Armadillo/CMake/)
+set(CMAKE_MODULE_PATH  /home/noah/usr/share/Armadillo/CMake)
+find_package(Armadillo CONFIG REQUIRED)
+include_directories(${ARMADILLO_INCLUDE_DIRS})
 SET ( SOURCES integrate.cpp lorenz63.c )
 
 
