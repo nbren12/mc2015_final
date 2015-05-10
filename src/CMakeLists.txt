@@ -19,17 +19,11 @@ endif()
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}
   /home/noah/usr/share/Armadillo/CMake
   /usr/local/share/Armadillo/CMake)
-find_package(Armadillo CONFIG REQUIRED)
+find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
-SET ( SOURCES integrate.cpp lorenz63.c )
-
-
 
 # set_directory_properties( PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES  "snap_shots;OUTPUT;parameters_output.txt;params.nml" )
 # configure_file( deep_moist ${CMAKE_CURRENT_BINARY_DIR}/deep_moist COPYONLY)
-add_library( lorenz63 SHARED ${SOURCES})
-target_link_libraries (lorenz63 m gsl gslcblas armadillo) 
-
 
 add_executable(param_search param_search.cpp equil.cpp integrate.cpp mcmc.cpp)
 target_link_libraries (param_search m gsl gslcblas armadillo) 
