@@ -126,11 +126,11 @@ vec evolve(double tStart, double tEnd, vec y, vec& theta, double dtMax){
   return y;
 }
 
-mat run_model(vec& tout, vec & y, double dtMax)
+mat run_model(vec& tout, vec & y, double dtMax, double sigma, double beta, double r, double epsilon)
 {
    // initialize working arrays
   const int n =3;
-  WorkStruct work(n);
+  WorkStruct work(n, sigma, beta, r, epsilon);
 
   // Output data
   mat output(n, tout.n_elem);

@@ -36,12 +36,12 @@ void estimate_parameters(long int N, double noise, double beta, double tau, int 
     tout(i) = i *tau;
   }
 
-  vec y("-7.4185 -12.4638 15.6519");		// initial condition
-  auto output = run_model(tout, y);		// get output data
+  vec y("-7.4185 -12.4638 15.6519");		// initial condition of Lorenz63 system
+  auto output = run_model(tout, y);		// Get truth model samples for times in tout
 
-  vec theta;					// Parameters
-  theta << 10.0 << 8.0/3.0 << 28.0 << noise;	// True values
-  theta << 13.0 << 5.0/3.0 << 20.0 << noise;	// init cond
+  vec theta;					// Vector of parameters
+  theta << 10.0 << 8.0/3.0 << 28.0 << noise;	// True values of parameters
+  theta << 13.0 << 5.0/3.0 << 20.0 << noise;	// init cond of parameters
 
   auto f = bind(equil, _1, output, tout, beta); // equildist for theta f(theta) 
 
@@ -64,11 +64,27 @@ void estimate_parameters(long int N, double noise, double beta, double tau, int 
 
 int main(int argc, char *argv[])
 {
-  long int N = atol(argv[1]);
-  double noise = atof(argv[2]);
-  double beta = atof(argv[3]);
-  double tau = atof(argv[4]);
-  int nt = atol(argv[5]);
-  estimate_parameters(N,  noise,  beta,  tau, nt);
+  int offset = 1;
+  double tau = atof(argv[++offset]);
+  int nt = atol(argv[++offset]);
+
+  if  (strcmp(argv[1], "sample") == 0){
+    double noise = atof(argv[++offset]);
+    double beta = atof(argv[++offset]);
+    long int N = atol(argv[++offset]);
+    estimate_parameters(N,  noise,  beta,  tau, nt);
+
+  } else if  (strcmp(argv[1], "run") == 0){
+
+    double sigma = atof(argv[++offset]);
+    double beta = atof(argv[++offset]);
+    double r = atof(argv[++offset]);
+    double epsilon = atof(argv[++offset]);
+
+    vec tout = linspace(0, nt * tau, nt+1);             // Output times
+    vec y("-7.4185 -12.4638 15.6519");			// initial condition
+    auto output = run_model(tout , y, .001, sigma, beta, r, epsilon);
+    output.print();
+  }
   return 0;
 }

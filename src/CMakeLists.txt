@@ -25,7 +25,7 @@ include_directories(${ARMADILLO_INCLUDE_DIRS})
 # set_directory_properties( PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES  "snap_shots;OUTPUT;parameters_output.txt;params.nml" )
 # configure_file( deep_moist ${CMAKE_CURRENT_BINARY_DIR}/deep_moist COPYONLY)
 
-add_executable(param_search param_search.cpp equil.cpp integrate.cpp mcmc.cpp)
-target_link_libraries (param_search m gsl gslcblas armadillo) 
+add_executable(lorenzmcmc param_search.cpp equil.cpp integrate.cpp mcmc.cpp)
+target_link_libraries (lorenzmcmc m gsl gslcblas armadillo) 
 
 
