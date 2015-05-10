@@ -4,27 +4,25 @@
 
 #include "mcmc.h"
 
-#define gaussian_length_scale 1.0
+#define gaussian_length_scale 0.1
+#define NUMP 3
 
 gsl_rng * r;
 
 using namespace arma;
 
 void proposal_rand(vec& X, vec& Y){
-  int d = X.n_elem;
   int i;
-  for (i = 0; i < d; i++) {
+  for (i = 0; i < NUMP; i++) {
     Y(i) = X(i) + gsl_ran_gaussian(r, gaussian_length_scale);
   }
 }
 
 // Proposal step generate gaussian
 double proposal_pdf(vec& X, vec& Y){
-  int d = X.n_elem;
   int i;
-
   double p = 1.0;
-  for (i = 0; i < d; i++) {
+  for (i = 0; i < NUMP; i++) {
     p *= gsl_ran_gaussian_pdf(Y(i)-X(i), gaussian_length_scale);
   }
 
@@ -45,8 +43,8 @@ template<typename func> int A(func& f, vec& X, vec& Y ){
 }
 
 // MCMC runner
-template<typename func, typename observer>
-void run_mcmc(func& f, vec& X, long int N, observer obs){
+void run_mcmc( std::function<double(vec&)> f, vec& X, long int N,
+	       std::function<void(vec&)> obs){
   int i;
   r = gsl_rng_alloc(gsl_rng_default);
   // Copy X into new dvec Y
@@ -55,7 +53,7 @@ void run_mcmc(func& f, vec& X, long int N, observer obs){
   for (i = 0; i < N; i++) {
     proposal_rand(X, Y);
     if (A(f, X, Y))
-      std::copy(Y.begin(), Y.end(), X.begin());
+      X = Y;
 
     // Observe X
     obs(X);

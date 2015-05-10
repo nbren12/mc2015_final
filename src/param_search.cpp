@@ -1,9 +1,12 @@
+#include <functional>
 #include <armadillo>
 #include "mcmc.h"
 #include "equil.h"
 #include "integrate.h"
 
 using namespace arma;
+using namespace std;
+using namespace std::placeholders;
 
 int test_equil_distr()
 {
@@ -26,8 +29,10 @@ int test_equil_distr()
 
 int main(int argc, char *argv[])
 {
+  long int N  = 1000;   // Number of samples
+
   double tau  = 1.0;   // Sampling interval
-  double beta = .01;   // Inverse temperature
+  double beta = .04;   // Inverse temperature
   double tEnd = 100.0; // Sampling length
 
   vec tout = linspace(0.0, tEnd, (int) tEnd /tau);	// Output times
@@ -40,8 +45,14 @@ int main(int argc, char *argv[])
   theta << 10.0 << 8.0/3.0 << 28.0 << 0.0;	// True values
   theta(0) = 10.5;				// Make sigma different
 
-  
-  cout << equil(theta, output, tout, beta);      // Print equil output
+  // auto f = bind(equil, _1, output, tout, .01);  // equildist for theta f(theta) 
+  auto f = [&](vec & theta){
+    return equil(theta, output, tout, .01);
+  };
+
+  run_mcmc(f, theta, N, [](vec& x){
+      x.print();
+    });
 
   return 0;
 }
