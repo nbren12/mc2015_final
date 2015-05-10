@@ -29,9 +29,9 @@ int test_equil_distr()
 
 int main(int argc, char *argv[])
 {
-  long int N  = 1000;   // Number of samples
-
-  double tau  = 1.0;   // Sampling interval
+  long int N  = 10000;   // Number of samples
+  double noise = 1.0;  // Imperfect model
+  double tau  = 10.0;   // Sampling interval
   double beta = .04;   // Inverse temperature
   double tEnd = 100.0; // Sampling length
 
@@ -42,17 +42,23 @@ int main(int argc, char *argv[])
   auto output = run_model(tout, y);			// get output data
 
   vec theta;					// Parameters
-  theta << 10.0 << 8.0/3.0 << 28.0 << 0.0;	// True values
+  theta << 10.0 << 8.0/3.0 << 28.0 << noise;	// True values
   theta(0) = 10.5;				// Make sigma different
 
-  // auto f = bind(equil, _1, output, tout, .01);  // equildist for theta f(theta) 
-  auto f = [&](vec & theta){
-    return equil(theta, output, tout, .01);
-  };
+  auto f = bind(equil, _1, output, tout, beta);  // equildist for theta f(theta) 
 
-  run_mcmc(f, theta, N, [](vec& x){
-      x.print();
+  // Setup output file
+  ofstream outfile;
+  outfile.open("samples.txt");
+    
+  run_mcmc(f, theta, N, [&](vec& x){
+      int i;
+      for (i = 0; i < x.n_elem; i++) {
+	outfile << x[i];
+	if (i < x.n_elem -1) outfile << " ";
+      }
+      outfile << endl;
     });
-
+  outfile.close();
   return 0;
 }

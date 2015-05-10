@@ -1,20 +1,22 @@
 #include <armadillo>
+#include <iostream>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
 #include "mcmc.h"
 
-#define gaussian_length_scale 0.1
 #define NUMP 3
 
 gsl_rng * r;
 
 using namespace arma;
+using namespace std;
 
 void proposal_rand(vec& X, vec& Y){
   int i;
+  double stdev[]= {.3, .1, 0.3};
   for (i = 0; i < NUMP; i++) {
-    Y(i) = X(i) + gsl_ran_gaussian(r, gaussian_length_scale);
+    Y(i) = X(i) + gsl_ran_gaussian(r, stdev[i]);
   }
 }
 
@@ -22,8 +24,9 @@ void proposal_rand(vec& X, vec& Y){
 double proposal_pdf(vec& X, vec& Y){
   int i;
   double p = 1.0;
+  double stdev[]= {.5, .1, 1.0};
   for (i = 0; i < NUMP; i++) {
-    p *= gsl_ran_gaussian_pdf(Y(i)-X(i), gaussian_length_scale);
+    p *= gsl_ran_gaussian_pdf(Y(i)-X(i), stdev[i]);
   }
 
   return p;
@@ -51,6 +54,7 @@ void run_mcmc( std::function<double(vec&)> f, vec& X, long int N,
   vec Y = X;
 
   for (i = 0; i < N; i++) {
+    cout << "Sample "<< i << " of " << N << endl;
     proposal_rand(X, Y);
     if (A(f, X, Y))
       X = Y;

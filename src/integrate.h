@@ -9,7 +9,7 @@
 using namespace arma;
 
 arma::vec evolve(double tStart, double tEnd, arma::vec y, arma::vec& theta,
-		 double dtMax = .001);
+		 double dtMax = .01);
 
 
 
