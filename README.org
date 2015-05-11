@@ -91,3 +91,8 @@ resampling technique.
 ** TODO Find ideal Gibbs beta
   
 ** TODO Increasing rayleigh number 
+
+** Observation interval
+   
+** Noise at long observation times
+   
