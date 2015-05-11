@@ -48,7 +48,7 @@ void estimate_parameters(long int N, double noise, double beta, double tau, int 
   // Setup output file
   ofstream outfile;
   outfile.open("samples.txt");
-  outfile << "sigma,beta,r,noise" << endl;
+  outfile << "sigma,b,r,noise" << endl;
 
   // Run the sampler
   run_mcmc(f, theta, N, [&](vec& x){
