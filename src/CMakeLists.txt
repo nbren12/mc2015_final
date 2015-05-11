@@ -19,7 +19,7 @@ endif()
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}
   /home/noah/usr/share/Armadillo/CMake
   /usr/local/share/Armadillo/CMake)
-find_package(Armadillo REQUIRED)
+find_package(Armadillo REQUIRED CONFIG)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
 
 # set_directory_properties( PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES  "snap_shots;OUTPUT;parameters_output.txt;params.nml" )
