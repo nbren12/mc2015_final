@@ -15,7 +15,7 @@ double equil(vec& theta, mat& U, vec& t, const double beta){
     prob += norm(y-U.col(i+1), 2);
   }
 
-  prob = exp(-beta * prob);
+  prob = exp(-beta * prob/ (t.n_elem -1));
 
   return prob;
   
