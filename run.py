@@ -27,7 +27,9 @@ def sample(N=1000, tau=1.0, nt=10, noise=.1, beta=.01):
     floatargs = [tau, nt, noise, beta, N]
     args += list(map(str, floatargs))
     subprocess.call(args, stdout=subprocess.PIPE)
-    return pd.read_csv("samples.txt")
+    df= pd.read_csv("samples.txt")
+    title = "{N} Samples; tau={tau}; nt={nt}; noise={noise}; beta={beta}".format(**locals())
+    return df, title
 
 if __name__ == '__main__':
     print(sample())
