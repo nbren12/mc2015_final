@@ -1,5 +1,19 @@
+#+startup: beamer
+#+OPTIONS: h:2
+#+LaTeX_CLASS: beamer
+#+LATEX_HEADER: \usepackage{svg}
 Not sure what the due date is for this project.
 
+
+* Codes 							   :noexport:
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "./org-reveal")
+  (require 'ox-reveal)
+  (require 'ob-dot)
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+#+RESULTS:
 
 * Introduction
 
@@ -35,7 +49,7 @@ $t_j=j \tau$ can be defined for $j=0...N$. Let $\Psi_t^{\theta}$ be the
 pushforward operator for deterministic part of the dynamics. Given a
 set of point estimates $U_j$ and parameters, define the dynamic
 residual for a time $t_j$ to be
-\[ e_j := e(U_{j-1}, U_j, \theta) :=  \Psi_{\tau}^{\theta} U_{j-1} - U_j.\]
+\[ e_j(\theta) := e(U_{j-1}, U_j, \theta) :=  \Psi_{\tau}^{\theta} U_{j-1} - U_j.\]
 
 Then, a sensible way to choose the parameters is so that they minimize
 \[ \sum_{j=1}^{N}|e_j|^2.\]
@@ -44,11 +58,28 @@ Because $\theta$ is a potentially high dimensional object, monte carlo
 techniques can be used to perform this optimization.
 
 * Sampling strategy
+** Equilibrium distribution
 
-Generate samples $\theta_k$ from
-\[ f(\theta) \propto  e^{-\beta \sum_{j=1}^{N}|e_j|^2}.\]
-Then, the estimate as the sample $\theta_{k*}$ which minimizes $f$.
+- Vector of parameters $\theta = [\sigma, r, \beta ]$
 
+- Generate samples $\theta_k$ from
+  \[ f(\theta) \propto  \exp \left( \frac{\beta}{N}\sum_{j=1}^{N}|e_j(\theta)|^2 \right).\]
+- The mode of $f(\theta)$ is the value that minimizes the dynamic residuals
+
+** Proposal Distribution
+  
+- Independent gaussian proposal function:
+  \[P(\theta_{0}, \theta_1) \propto \exp \left( \frac{1}{2} (\theta_1
+  -\theta_0)^T C^{-1} (\theta_1 -\theta_0) \right) \]
+- Covariance matrix: $C_{11} = .5^2$, $C_{22} = .1^2$, $C_{33}=1.0^2$,
+  $C_{ij} = 0$ if $i\ne j$.
+  
+** Acceptance Probability 
+
+Metropolis-Hastings acceptance probability:
+\[ A(\theta_0, \theta_1 ) = \min \left\{1, \frac{f(\theta_1)
+P(\theta_1, \theta_0)}{f(\theta_0) P(\theta_0, \theta_1)}  \right\}  \]
+   
 * Data assimilation
 Note that $U_{j}$ is only in $e_j$ and $e_{j-1}$, this can be used to
 simplify the optimization problem, and suggests some sort of
@@ -56,24 +87,21 @@ resampling technique.
 
 * Code Architecture
 
-#+BEGIN_SRC emacs-lisp
-  (require 'ob-dot)
-  (setq org-confirm-babel-evaluate nil)
-#+END_SRC
 
-- The integrator for the dynamical system is defined in [[file:src/integrate.cpp][integrate.cpp]].
+- The integrator for the dynamical system is defined in [[file:src/integrate.cpp]].
 - [[file:src/equil.cpp]] contains the equilibrium distribution
 - The basic proposal distribution and metropolis acceptance function
   are defined in [[file:src/mcmc.cpp]].
-- [[file:src/param_search.cpp]] will contain the main function
+- [[file:src/param_search.cpp]] contains the parameter searching method.
   
 ** Dependency Graph
 
-#+BEGIN_SRC dot :file dependency.svg
+#+BEGIN_SRC dot :file dependency.pdf
   digraph thing {
    "param_search.cpp" -> "equil.cpp";
    "param_search.cpp" -> "mcmc.cpp";
    "equil.cpp" -> "integrate.cpp";
+   "param_search.cpp" -> "integrate.cpp";
    
   }
 #+END_SRC
@@ -87,12 +115,15 @@ resampling technique.
 ** DONE Write a test showing output of lorenz63 with and 
 
 * Results
+** Observation interval
+
+\includegraphics{{tau-.5-0}}
+ 
+   
 
 ** TODO Find ideal Gibbs beta
   
 ** TODO Increasing rayleigh number 
 
-** Observation interval
-   
 ** Noise at long observation times
    
