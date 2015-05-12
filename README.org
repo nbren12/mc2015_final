@@ -14,7 +14,7 @@
 #+RESULTS:
 
 * Introduction
-** Introduction 
+** Introduction							   :noexport:
 
 - The point of this final project is to learn parameters in Lorenz63
   using monte carlo methods. The approach taken is to formulate a
@@ -68,19 +68,19 @@ techniques can be used to perform this optimization.
 
 ** Equilibrium distribution
 
-- Vector of parameters $\theta = [\sigma, r, \beta ]$
+- Vector of parameters $\theta = [\sigma, r, b]$
 
 - Generate samples $\theta_k$ from
-  \[ f(\theta) \propto  \exp \left( \frac{\beta}{N}\sum_{j=1}^{N}|e_j(\theta)|^2 \right).\]
+  \[ f(\theta) \propto  \exp \left( -\frac{\beta}{N}\sum_{j=1}^{N}|e_j(\theta)|^2 \right).\]
 - The mode of $f(\theta)$ is the value that minimizes the dynamic residuals
-** Data assimilation
+** Data assimilation						   :noexport:
 Note that $U_{j}$ is only in $e_j$ and $e_{j-1}$, this can be used to
 simplify the optimization problem, and suggests some sort of
 resampling technique.
 ** Proposal Distribution
   
 - Independent gaussian proposal function:
-  \[P(\theta_{0}, \theta_1) \propto \exp \left( \frac{1}{2} (\theta_1
+  \[P(\theta_{0}, \theta_1) \propto \exp \left( -\frac{1}{2} (\theta_1
   -\theta_0)^T C^{-1} (\theta_1 -\theta_0) \right) \]
 - Covariance matrix: $C_{11} = .5^2$, $C_{22} = .1^2$, $C_{33}=1.0^2$,
   $C_{ij} = 0$ if $i\ne j$.
@@ -100,7 +100,7 @@ P(\theta_1, \theta_0)}{f(\theta_0) P(\theta_0, \theta_1)}  \right\}  \]
   - [[http://arma.sourceforge.net][Armadillo++]] for convenient vector arithmetic
   - [[http://www.gnu.org/software/gsl/gsl.html][GNU Scientific Library]] for random number generation
 
-** Code Architecture
+** Code Architecture						   :noexport:
 
 - The integrator for the dynamical system is defined in [[file:src/integrate.cpp]].
   - Second order explicit predictor/corrector method for deterministic dynamics
@@ -110,7 +110,7 @@ P(\theta_1, \theta_0)}{f(\theta_0) P(\theta_0, \theta_1)}  \right\}  \]
   are defined in [[file:src/mcmc.cpp]].
 - [[file:src/param_search.cpp]] contains the parameter searching method.
   
-** Dependency Graph
+** Code Architecture
 
 #+BEGIN_SRC dot :file dependency.pdf :exports results
   digraph thing {
