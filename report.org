@@ -8,7 +8,6 @@
 
 * Introduction
 
-
 Operational and theoretical climate and weather prediction use a host
 of approximations known as /parameterizations/ to account for sub-grid
 scale dynamics. Frequently these parameters are physically well
@@ -58,7 +57,7 @@ residual for a time $t_j$ to be
 Then, a sensible way to choose the parameters is so that they minimize
 \[ H(\theta ) = \frac{1}{N}\sum_{j=1}^{N}|e_j(\theta)|^2.\]
 The corresponding Gibbs distribution is 
-$f(\theta) \propto \exp\left(-\beta H(\theta))$.
+$f(\theta) \propto \exp\left(-\beta H(\theta) \right)$.
 
 This Gibbs distribution is sampled using a Metropolis-Hastings
 algorithm with a proposal distribution that is independent in each
@@ -102,6 +101,9 @@ problem in terms of equilibirum statistics. The /dynamic residuals/
 approach is subject to the inherent predictability limit of the
 system and essentially misses the forest through the trees.
 
+
+The code for this project is available on github at
+[[https://github.com/nbren12/mc2015_final]].
 
 
 \printbibliography
