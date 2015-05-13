@@ -1,0 +1,87 @@
+#+TITLE: Monte Carlo parameter estimation in the Lorenz 63 system
+#+AUTHOR: Noah D. Brenowitz
+#+OPTIONS: h:2 toc:nil
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage[natbib,citestyle=authoryear-comp]{biblatex}
+#+LATEX_HEADER: \bibliography{ref.bib}
+#+LATEX_HEADER: \let\cite\citep
+
+* Introduction
+
+
+Operational and theoretical climate and weather prediction use a host
+of approximations known as /parameterizations/ to account for sub-grid
+scale dynamics. Frequently these parameters are physically well
+motivated, but just as frequently these parameters are chosen an a /ad
+hoc/ manner. 
+
+As a proof of concept, the point of this final project is to learn
+parameters in a simple chaotic dynamical system using Markov Chain
+Monte Carlo (MCMC) techniques. The approach used is to minimize the
+sum of squares of the /dynamic residuals/ as proposed by Prof. Goodman
+in a conversation. As a simple prototype chaotic simple, we use the 3
+dimensional ODE introduced in \cite{Lorenz1963}.
+
+This system is one of the earliest examples of what would later become
+known as /chaotic/ dynamical systems. It is obtained by projection of
+the Rayleigh-Benard equations for convection of a thin layer onto
+three orthogonal modes. The system is given by
+\begin{align}
+\dot{X} &= \sigma(Y-X)\\
+\dot{Y} &= -XZ + rX - Y\\
+\dot{Z} &= XY - bZ.
+\end{align}
+
+The parameters used by Lorenz are $\sigma = 10$, $b=8/3$ and
+$r=28$. The objective of this project is estimate these three
+parameters using Monte Carlo. This problem is the simplest prototype
+of parameter fitting in chaotic dynamical systems.
+
+
+* Parameter fitting procedure
+
+The general outline here is to define a dynamics based loss function,
+and then samples from the associated Gibbs distribution. The loss
+function was proposed by Prof. Goodman in a meeting is sum of squares
+of the so-called /dynamic residuals/. 
+
+Let $U$ be given by the dynamics \[ \dot{U} = F(U; \theta) + \sigma
+\dot{W}\] where $\theta$ is some set of parameters.
+
+Let $T > 0$, $N$, and define $\tau = T / (N+1)$. Then, a temporal grid
+$t_j=j \tau$ can be defined for $j=0...N$. Let $\Psi_t^{\theta}$ be the
+pushforward operator for deterministic part of the dynamics. Given a
+set of point estimates $U_j$ and parameters, define the dynamic
+residual for a time $t_j$ to be
+\[ e_j(\theta) := e(U_{j-1}, U_j, \theta) :=  \Psi_{\tau}^{\theta} U_{j-1} - U_j.\]
+
+Then, a sensible way to choose the parameters is so that they minimize
+\[ H(\theta ) = \frac{1}{N}\sum_{j=1}^{N}|e_j(\theta)|^2.\]
+The corresponding Gibbs distribution is 
+$f(\theta) \propto \exp\left(-\beta H(\theta))$.
+
+
+
+
+\printbibliography
+
+
+
+
+* Code								   :noexport:
+
+#+BEGIN_SRC bibtex :tangle ref.bib 
+  @article{Lorenz1963,
+    doi = {10.1175/1520-0469(1963)020<0130:dnf>2.0.co;2},
+    url = {http://dx.doi.org/10.1175/1520-0469(1963)020<0130:DNF>2.0.CO;2},
+    year  = {1963},
+    month = {mar},
+    publisher = {American Meteorological Society},
+    volume = {20},
+    number = {2},
+    pages = {130--141},
+    author = {Edward N. Lorenz},
+    title = {Deterministic Nonperiodic Flow},
+    journal = {Journal of the Atmospheric Sciences}
+  }
+#+END_SRC
