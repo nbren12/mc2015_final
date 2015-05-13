@@ -45,7 +45,7 @@ and then samples from the associated Gibbs distribution. The loss
 function was proposed by Prof. Goodman in a meeting is sum of squares
 of the so-called /dynamic residuals/. 
 
-Let $U$ be given by the dynamics \[ \dot{U} = F(U; \theta) + \sigma
+Let $U$ be given by the dynamics \[ \dot{U} = F(U; \theta) + \epsilon
 \dot{W}\] where $\theta$ is some set of parameters.
 
 Let $T > 0$, $N$, and define $\tau = T / (N+1)$. Then, a temporal grid
@@ -60,6 +60,47 @@ Then, a sensible way to choose the parameters is so that they minimize
 The corresponding Gibbs distribution is 
 $f(\theta) \propto \exp\left(-\beta H(\theta))$.
 
+This Gibbs distribution is sampled using a Metropolis-Hastings
+algorithm with a proposal distribution that is independent in each
+direction. In other words,
+ \[P(\theta_{0}, \theta_1) \propto \exp \left( -\frac{1}{2} (\theta_1
+  -\theta_0)^T C^{-1} (\theta_1 -\theta_0) \right),\]
+where the covariance matrix is given by $C_{11} = .5^2$, $C_{22} =
+.1^2$, and $C_{33}=1.0^2$, $C_{ij} = 0$ if $i\ne j$.
+
+A reference value of $\beta=2.0$ is used.
+
+
+* Results and Discussion
+
+The traces of the sampler are shown here for short and long
+observation intervales of $\tau = .5$ and 5.0, respectively:
+
+#+BEGIN_LaTeX
+\includegraphics[width=.45\textwidth]{{tau-.5-0}.pdf}%
+\includegraphics[width=.45\textwidth]{{tau5.0-0}.pdf}
+#+END_LaTeX
+
+The performance of the method is strongly dependent on the observation
+time interval $\tau$.  Using the dynamic residuals method to find
+parameters works well for short observations times $\tau \leq .5$, but
+MCMC performance is very poor for larger $\tau$ regardless of the
+$\beta$ parameter used. This makes sense if $\tau$ is approaching the
+predicatiblity limit of the system. Making a model error by
+introducing gaussian noise $\epsilon > 0$, can regularize the fit
+somewhat, but does not work miracles.  Of all the parameters in
+Lorenz63, the exhange parameter $\sigma$ is the most difficult to
+estimate and shows very long autocorrelation times compared to $r$ and
+$b$.
+
+Future directions include using the dynamics residuals approach for
+the state esimation problem, which might be more tractable given the
+simpler dependence of the $H(\theta)$ on the state estimates
+$U_j$. Since the parameters determine the shape of the Lorenz
+attractor, it probably makes more sense to pose the parameter-finding
+problem in terms of equilibirum statistics. The /dynamic residuals/
+approach is subject to the inherent predictability limit of the
+system and essentially misses the forest through the trees.
 
 
 
